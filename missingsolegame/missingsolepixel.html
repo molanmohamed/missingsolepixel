@@ -1,0 +1,220 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>the missing sole</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .element {
+            all: none;
+        }
+        
+        body,
+        html {
+            height: 100%;
+        }
+        
+        .universe1 {
+            background-image: url("morning.png");
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .universe2 {
+            background-image: url("sea.png");
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .flip {
+            -webkit-transform: scaleX(-1);
+            transform: scaleX(-1);
+        }
+        
+        .char {
+            width: 32px;
+            height: 75px;
+            position: absolute;
+            bottom: 16vh;
+        }
+        
+        .charb {
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            top: 15vh;
+            left: 30vh;
+        }
+        
+        .charf {
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            top: 80vh;
+            left: 40vh;
+            visibility: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="universe1">
+        <div class="characters">
+
+            <div class="char">
+                <img src="man.png" width="120px" height="120px">
+            </div>
+            <div class="charb">
+                <img src="bird.png" width="80px" height="80px" class="flip">
+            </div>
+            <div class="charf">
+                <img src="fish.png" width="90px" height="90px" class="flip">
+            </div>
+
+        </div>
+
+        <div class="weather"></div>
+    </div>
+
+    <script>
+        var char = document.querySelectorAll("div");
+        var universe = 1;
+        var left_val = 0;
+        var left_val1 = 30;
+        var top_val = 15;
+        var templeft = [37, 39];
+        var jump = 20;
+        var tans = false;
+        var flip = 39;
+        var index = 2;
+
+        function makeFlip() {
+
+        }
+
+        function logic() {
+            if (index == 3) {
+                if (left_val1 >= 1300) {
+                    //setInterval(100);
+                    universe = 2;
+                    left_val1 = 0;
+                    char[0].classList.add("universe2");
+                    char[2].style.display = "none";
+                    char[4].style.visibility = "visible";
+
+                }
+
+            }
+
+        }
+
+
+        function transfer() {
+            if (index == 2) {
+                index = 3;
+            } else {
+                index = 2;
+            }
+
+        }
+
+        window.addEventListener("keydown", function(event) {
+
+            logic();
+            if (event.which == 37 || event.which == 39) {
+                if (event.which != flip) {
+
+                    char[index].classList.toggle("flip");
+
+                    flip = event.which;
+
+                }
+            }
+
+            switch (event.which) {
+
+                case 39:
+
+                    if (index == 2) {
+                        if (left_val <= 1300) {
+                            left_val = left_val + 20;
+                            char[index].style.left = left_val + "px";
+                        }
+                    } else if (index == 3) {
+                        if (left_val1 <= 1300) {
+                            left_val1 = left_val1 + 20;
+                            char[index].style.left = left_val1 + "px";
+                        }
+                    }
+                    break;
+                case 37:
+
+                    /// char[index].classList.toggle("flip");
+                    if (index == 2) {
+
+                        if (left_val > 2) {
+                            left_val = left_val - 20;
+                            char[index].style.left = left_val + "px";
+                        }
+                    } else if (index == 3) {
+
+                        if (left_val1 > 0) {
+                            left_val1 = left_val1 - 20;
+                            char[index].style.left = left_val1 + "px";
+                        }
+
+                    }
+                    break;
+                case 32:
+                    char[index].style.bottom = 30 + "vh";
+                    if (index == 2) {
+                        setInterval(function() {
+                            char[index].style.bottom = 16 + "vh";
+                        }, 500);
+                    }
+                    break;
+                case 38:
+                    if (index == 3) {
+                        if (top_val >= 0) {
+                            top_val = top_val - 5;
+                            char[index].style.top = top_val + "vh";;
+                        }
+                    }
+                    break;
+                case 40:
+                    if (index == 3) {
+                        if (universe == 1) {
+                            if (top_val >= 0) {
+
+                                top_val = top_val + 5;
+                                char[index].style.top = top_val + "vh";;
+                            }
+                        } else if (universe == 2) {
+                            if (top_val <= 12) {
+
+                                top_val = top_val + 5;
+                                char[index].style.top = top_val + "vh";;
+                            }
+                        }
+                    }
+                    break;
+                    return;
+            }
+
+            if (event.which == 84) {
+                transfer();
+            }
+        })
+    </script>
+</body>
+
+</html>
