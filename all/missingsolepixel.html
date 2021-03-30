@@ -1,0 +1,1016 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>the missing sole</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .element {
+            all: none;
+        }
+        
+        body,
+        html {
+            height: 100%;
+        }
+        
+        .universe1 {
+            background-image: url("morning.png");
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .universe2 {
+            background-image: url("sea.jpg");
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .flip {
+            transform: scaleX(-1);
+        }
+        
+        .char {
+            width: 120px;
+            height: 120px;
+            position: absolute;
+            bottom: 6vh;
+            left: 0vw;
+            filter: brightness(100%);
+        }
+        
+        .glow {
+            filter: brightness(0%)
+        }
+        
+        .charb {
+            width: 50px;
+            height: 7vh;
+            position: absolute;
+            top: 5vh;
+            left: 30vh;
+        }
+        
+        .charf {
+            width: 13vw;
+            height: 20vh;
+            position: absolute;
+            bottom: 2vh;
+            left: 40vw;
+            visibility: hidden;
+        }
+        
+        .black {
+            filter: brightness(10%)
+        }
+        
+        .timer {
+            font-size: x-large;
+            color: rgb(255, 255, 255);
+            position: absolute;
+            top: 0px;
+            filter: brightness(100%);
+        }
+        
+        .box {
+            position: absolute;
+            bottom: 10vh;
+            left: 80vw;
+            filter: brightness(100%)
+        }
+        
+        .content {
+            visibility: hidden;
+            position: absolute;
+            bottom: 16vh;
+            left: 76vw;
+            width: 11vw;
+            height: 20vh;
+            background-color: rgba(54, 48, 48, 0.774);
+            border-radius: 10px;
+            border-width: thick;
+            border-style: solid;
+            border-color: rgb(228, 157, 3);
+        }
+        
+        .menu {
+            height: 50vh;
+            width: 14vw;
+            background-color: rgba(10, 68, 63, 0.521);
+            visibility: hidden;
+            position: fixed;
+            top: 3vh;
+            left: 4vw;
+            border-color: rgb(4, 23, 44);
+            border-style: solid;
+        }
+        
+        .show_hide_menu {
+            width: 40px;
+            height: 20px;
+            border-radius: 10px;
+            background-color: rgb(14, 14, 43);
+            position: fixed;
+            top: 20px;
+            left: 20px;
+        }
+        
+        .status {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .shark_die_scenario {
+            position: fixed;
+            bottom: 30vh;
+            left: 80vw;
+            width: 20vw;
+            height: 20vh;
+            visibility: hidden;
+        }
+        
+        .bomb {
+            position: absolute;
+            top: 43px;
+            left: 5vw;
+        }
+        
+        .wood {
+            position: absolute;
+            top: 80px;
+            left: 0vw;
+        }
+        
+        .botton {
+            position: absolute;
+            top: 100px;
+            left: 40px;
+        }
+        
+        .explosion {
+            background-image: url("explosion.png");
+            /*  background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;*/
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="universe1">
+        <div class="characters">
+
+            <div class="char">
+                <img class="char" src="man.png" width="120px" height="120px">
+            </div>
+            <div class="charb">
+                <img src="bird.png" width="80px" height="80px" class="flip">
+            </div>
+            <div class="charf">
+                <img src="shark.png" width="180px" height="120px" class="flip">
+            </div>
+            <div class="menu">
+
+            </div>
+        </div>
+        <div class="box">
+            <img src="box.png" width="80px" height="80px">
+
+        </div>
+        <div class="content">
+            <div class="element"><img src="poison.png" width="30px" height="30"></div>
+        </div>
+
+        <button class="show_hide_menu"></button>
+        <div class="menu">
+            <div class="status">
+                <div class="souls"><img src="souls.png" width="40px" height="40px"></div>
+                <div class="Bodies"><img src="bodies.png" width="40px" height="50px"></div>
+            </div>
+        </div>
+        <div class="shark_die_scenario">
+            <img class="bomb" src="bomb.png" width="80px" height="80px">
+            <img class="wood" src="wood.png" width="200px" height="100px">
+            <img class="botton" src="botton.png" width="30px" height="30px">
+        </div>
+
+    </div>
+
+    <script>
+        var char = document.querySelectorAll("div");
+        var universe = 1;
+        var visMenu = true;
+        var num = 0;
+        var vis = false;
+        var theMove;
+        var leftinc = 4;
+        var completely_dead;
+        var completely_deadM;
+        var timer;
+        var flappy;
+        var stop;
+        var stopb;
+        var soul = 0;
+
+        // console.log(window.innerHeight);
+        //console.log(window.innerWidth);
+
+        char[13].style.visibility = "visible"
+
+        function gameOver() {
+
+        }
+
+        function explosion() {
+            //char[13].childNodes[0].style.visibility= "hidden";
+            char[13].childNodes[1].style.visibility = "hidden";
+            //  char[13].childNodes[2].style.visibility = "hidden";
+            char[13].childNodes[3].style.visibility = "hidden";
+            char[13].childNodes[5].style.visibility = "hidden";
+            char[13].classList.add("explosion");
+            setTimeout(() => {
+                char[13].style.visibility = "hidden";
+            }, 2000)
+
+        }
+        // explosion();
+
+        function shark_die_scenario() {
+
+            if ((bird.left_val1 >= 80 && bird.left_val1 <= 85) && universe == 2 &&
+                (bird.top_val > 30)
+            ) {
+                explosion();
+                fallen_bird();
+                if (shark.left_val1 > 60) {
+                    shark.dead = true;
+                    shark.wasted();
+                }
+                //   bird.wasted();
+            }
+
+
+
+        }
+
+        function bird_die_scenario() {
+
+            console.log(man.dead);
+            if (man.dead) {
+                console.log("hi");
+                if (bird.left_val1 > 80) {
+                    console.log("hi");
+                    clearInterval(stopb);
+                    //  bird.dead = true;
+                    //i think that it is called more than one time while the bird is dead
+                    bird.wasted()
+                }
+            }
+
+        }
+
+        function fallen_bird() {
+            // bird.dead = true;
+            clearInterval(flappy);
+            bird.wasted();
+            //                    clearInterval(flappy);
+        }
+        var show_hide_menu_bt = document.getElementsByTagName("button")[0];
+        show_hide_menu_bt.addEventListener("click", function(event) {
+            // var visMenu = true;
+            if (visMenu) {
+                char[9].style.visibility = "visible";
+                visMenu = !visMenu;
+            } else {
+                visMenu = !visMenu;
+                char[9].style.visibility = "hidden";
+            }
+
+        })
+        var menu = {
+            souls: 0,
+            bodies: [],
+            addBodies: function(ob) {
+                // var in ;
+                //this function add the dead bodies section in the status in the menu so the soul could transfer
+                // console.log(menu.bodies)
+                menu.bodies.push(ob);
+                var img = ob.character.getElementsByTagName("img")[0];
+                var addImg = document.createElement("img");
+                addImg.style.width = "20px"
+                addImg.style.height = "20px"
+                addImg.src = img.getAttribute("src");
+                char[12].appendChild(addImg);
+                addImg.addEventListener("click", function(event) {
+                    if (menu.souls) {
+                        //  Array.prototype.indexOf.call(char[12].children, addImg);
+
+                        menu.bodies[Array.prototype.indexOf.call(char[12].children, addImg) - 1].relive();
+                        menu.removeBodies(menu.bodies[Array.prototype.indexOf.call(char[12].children, addImg) - 1]);
+                        //  menu.bodies[Array.prototype.indexOf.call(char[12].children, addImg) - 1].wasted();
+                    }
+                })
+            },
+
+            removeBodies: function(ob) {
+                // console.log("hi");
+                //char[12].removeChild(char[12].childNodes[1]);
+                for (var i = 0; i < menu.bodies.length; i++) {
+                    //   console.log("hi");
+                    // char[12].removeChild(char[12].childNodes[i + 1]);
+                    console.log(ob)
+                    console.log(menu.bodies[i])
+                    if (menu.bodies[i] == ob) {
+                        console.log("hello");
+                        console.log(menu.bodies[i]);
+                        // char[12].removeChild(char[12].childNodes[i + 1]);
+                        menu.bodies.splice(i, i + 1);
+                        console.log(menu.bodies[i]);
+                        //
+
+                        char[12].removeChild(char[12].childNodes[i + 1]);
+
+                    }
+                }
+            },
+
+
+
+        }
+
+        function hide_seek(num) {
+            // this function hides the items of different universes 
+
+            // we should loop through an array of objects i cant make it
+            //   console.log(universe)
+            //  console.log(man.universe)
+            if (universe == 2) {
+                char[13].style.visibility = "visible";
+            } else {
+                char[13].style.visibility = "hidden";
+            }
+            man.reallocate();
+            box.reallocate();
+            shark.reallocate();
+            bird.reallocate();
+
+        }
+
+        function multiverse(num) {
+            //this function brings the new universe
+            if (num > 0) {
+                universe++;
+                char[0].classList.remove("universe" + (num - 1))
+                char[0].classList.add("universe" + num);
+            } else {
+                universe--;
+                char[0].classList.remove("universe" + (-(num - 1)))
+                char[0].classList.add("universe" + (-num));
+            }
+
+        }
+
+        function pixelToView(num, ch) {
+            //this function tranform any pixel into view 
+            var view;
+            if (ch == "w") {
+                view = window.innerWidth / 100;
+            } else if (ch == "h") {
+                view = window.innerHeight / 100;
+            }
+
+            return num / view;
+
+        }
+
+
+        var box = {
+            character: char[6],
+            left_val1: 80,
+            top_val: 90,
+            ready_to_open: false,
+            universe: 1,
+            open: function() {
+
+                if (box.ready_to_open) {
+
+                    vis = !vis;
+                    if (vis) {
+                        box.contentSelection();
+                        char[7].style.visibility = "visible";
+
+                    } else {
+
+                        char[7].style.visibility = "hidden";
+                    }
+
+                }
+            },
+            contentSelection: function() {
+
+                //just one time
+                char[8].addEventListener("click", function(event) {
+                    //man.dead = true;
+                    man.wasted();
+                    char[8].style.visibility = "hidden";
+                })
+            },
+            reallocate: function() {
+                //this function is supposed to check if the object is visible in that universe or not 
+                if (this.universe != universe) {
+                    this.character.style.visibility = "hidden";
+                    char[7].style.visibility = "hidden"
+
+                } else {
+                    this.character.style.visibility = "visible";
+                    // char[7].style.visibility = "visible";
+                }
+            },
+
+        }
+
+
+
+
+        var index = 2;
+        var bool = true;
+        // var stop;
+
+        var bird = {
+            character: char[3],
+            top: char[3].style.top,
+            left: char[3].style.left,
+            left_val1: 30,
+            width: 4,
+            top_val: 5,
+            timer: 40,
+            defaultLeft: 1.5,
+            dead: false,
+            per_dead: false,
+            universe: 1,
+            manual: false,
+            max_def: 94,
+            min_def: 5,
+
+            reallocate: function() {
+                if (this.universe != universe) {
+                    this.character.style.visibility = "hidden";
+
+                } else {
+                    this.character.style.visibility = "visible";
+                }
+            },
+            /*addToBodies: function() {
+                //this function i useless
+                if (bird.dead == true && bird.per_dead == false) {
+
+                    menu.bodies.push(bird);
+
+                    menu.addBodies(bird);
+                }
+            },*/
+            def_move_bird: function() {
+
+                if (bird.dead != true && bird.manual == false) {
+                    if (true) {
+                        stopb = setInterval(() => {
+                            bird_die_scenario();
+                            bird.left_val1 = bird.left_val1 + bird.defaultLeft;
+                            bird.character.style.left = bird.left_val1 + "vw";
+                            if (bird.left_val1 > bird.max_def) {
+                                bird.defaultLeft = -1.5;
+                                bird.character.classList.toggle("flip");
+
+                            } else if (bird.left_val1 < bird.min_def) {
+                                bird.defaultLeft = 1.5;
+                                bird.character.classList.toggle("flip");
+
+                            }
+                        }, 100);
+                    } else {
+                        clearInterval(stopb);
+                    }
+                }
+            },
+
+            manual_bird_move: function() {
+
+                if (bird.dead != true && bird.manual == true) {
+
+
+                    flappy = setInterval(() => {
+
+                        this.top_val = this.top_val + 1.5;
+                        if (this.top_val > 80 && this.universe == 1) {
+                            console.log("hi");
+                            fallen_bird();
+                        }
+                        if (this.top_val > 60 && this.universe == 2) {
+                            console.log("hi")
+                            console.log(bird.top_val);
+
+                            fallen_bird();
+                        }
+                        // else if(this.top_val>)
+                        if (bird.dead != true) {
+                            bird.character.style.top = this.top_val + "vh";
+                        }
+
+
+                    }, 35);
+                    // }
+                }
+
+            },
+            wasted: function() {
+
+                bird.dead = true; //becarefull because this is a bug but i don`t know it details 
+
+
+                //this function get the bird to the ground if it dies and it is not in the ground
+
+                // bird.def_move_bird(false);
+                if (man.dead == true) {
+                    menu.souls++;
+                }
+                flappy = setInterval(() => {
+                    this.top_val = this.top_val + 1.5;
+                    if (this.top_val >= 80 && this.universe == 1) {
+                        // fallen_bird();
+                        clearInterval(flappy);
+                    } else if (this.top_val > 60 && this.universe == 2) {
+                        clearInterval(flappy);
+                    }
+                    // else if(this.top_val>)
+                    if (bird.dead == true) {
+                        bird.character.style.top = this.top_val + "vh";
+                    }
+                }, 35)
+
+                menu.addBodies(bird);
+                // bird.addToBodies();
+                bird.character.classList.toggle("black");
+                timer = document.createElement("div");;
+                bird.character.appendChild(timer);
+                timer.classList.add("timer");
+                // console.log(bird.timer);
+                completely_dead = setInterval(
+                    () => {
+                        //console.log(bird.timer);
+                        bird.timer--;
+                        timer.innerHTML = bird.timer;
+                        if (bird.timer == 0) {
+                            //1 clearInterval(completely_dead);
+                            bird.innerHTML = "dead";
+                            bird.per_dead = true;
+                            bird.character.remove();
+                            menu.removeBodies(bird);
+
+                        }
+                    }, 1000
+                )
+
+
+
+
+            },
+            relive: function() {
+
+                // menu.removeBodies(bird);
+                //menu.bodies
+                menu.souls--;
+                console.log("relife")
+                bird.dead = false;
+                bird.top_val = 5;
+                bird.manual = true;
+                bird.manual_bird_move();
+                bird.character.classList.remove("black");
+                timer.parentNode.removeChild(timer);
+                bird.character.style.top = bird.top_val + "vh"
+                    //  bird.wasted();
+                    // menu.removeBodies(bird);
+
+            },
+            switchUniverse: function() {
+                if (bird.manual == true) {
+                    if (bird.left_val1 > 100) {
+                        bird.universe = bird.universe + 1;
+                        //  hide_seek(bird.universe);
+                        //console.log(bird.universe);
+                        bird.left_val1 = 5;
+                        bird.character.style.left = bird.left_val1 + "vw";
+                        multiverse(bird.universe);
+                        hide_seek(bird.universe);
+                    } else if (bird.left_val1 < 0) {
+                        if (bird.universe != 1) {
+                            bird.universe = bird.universe - 1;
+                            //console.log(bird.universe);
+                            //  hide_seek(bird.universe);
+                            bird.left_val1 = 95;
+                            bird.character.style.left = bird.left_val1 + "vw";
+                            multiverse(-(bird.universe));
+                            hide_seek(bird.universe);
+                        }
+                    }
+                }
+
+            },
+        }
+        var man = {
+
+            character: char[2],
+            top: char[2].style.top,
+            left: char[2].style.left,
+            width: 9,
+            left_val1: 0,
+            bottom_val: 6,
+            defaultLeft: 1.5,
+            timer: 70,
+            dead: false,
+            per_dead: false,
+            universe: 1,
+            manual: true,
+            defaultJumb: 1,
+            jump: function() {
+                var stopJump;
+                var dec = false;
+                if (!man.dead) {
+                    function jump1() {
+                        man.bottom_val = man.bottom_val + man.defaultJumb;
+                        man.character.style.bottom = man.bottom_val + "vh"
+                        if (man.bottom_val > 25) {
+                            dec = true
+                            man.defaultJumb = -man.defaultJumb;
+                        }
+                    }
+                    //   man.character.addEventListener("click", function(event) {
+                    stopJump = setInterval(() => {
+                        jump1()
+                        if (dec && man.bottom_val <= 6) {
+                            man.defaultJumb = -man.defaultJumb;
+                            clearInterval(stopJump);
+                            dec = false;
+                        }
+                    }, 8);
+
+
+                    // })
+
+
+                }
+            },
+            reallocate: function() {
+                if (man.universe != universe) {
+                    man.character.style.visibility = "hidden";
+
+                } else {
+                    man.character.style.visibility = "visible";
+                }
+            },
+            open: function() {
+                if (man.left_val1 >= 70 && man.left_val1 <= 90) {
+                    box.ready_to_open = true;
+                } else {
+                    box.ready_to_open = false;
+                }
+            },
+
+            move: function() {
+                if (!man.dead) {
+                    var leftIncMan = 0.15;
+                    // window.addEventListener("mousedown", function(event) {
+
+                    if (!(pixelToView(event.clientX, "w") >= man.left_val1 && pixelToView(event.clientX, "w") <= (man.left_val1 + man.width))) {
+
+                        //you should transfer the client into viewport
+                        //create  function that check if that left equals to any left so it stops 
+                        if (pixelToView(event.clientX, "w") >= man.left_val1) {
+                            if (leftIncMan < 0) {
+                                leftIncMan = -leftIncMan;
+                            }
+                            man.character.classList.remove("flip");
+
+                        } else {
+                            if (leftIncMan > 0) {
+                                leftIncMan = -leftIncMan;
+
+                            }
+                            man.character.classList.add("flip");
+                        }
+                        theMove = setInterval(
+                            () => {
+
+                                man.open();
+                                man.left_val1 = man.left_val1 + leftIncMan;
+
+                                man.character.style.left = man.left_val1 + "vw";
+                            },
+                            5);
+                        // } else {
+
+                        // }
+                    }
+
+
+                    //})
+
+                }
+            },
+            wasted: function() {
+                man.dead = true;
+                if (man.dead) {
+                    menu.souls++;
+                    menu.addBodies(man);
+
+                    man.character.classList.add("black");
+                    timer = document.createElement("div");
+                    man.character.appendChild(timer);
+                    timer.classList.add("timer");
+                    // console.log(man.character.childNodes[1]);
+
+                    completely_deadM = setInterval(
+                        () => {
+                            man.timer--;
+                            timer.innerHTML = man.timer;
+                            if (man.timer == 0) {
+                                //   clearInterval(completely_deadM);
+
+                                man.innerHTML = "dead";
+                                // man.per_dead = true;
+                                man.character.remove();
+                                menu.removeBodies(man);
+
+                            }
+                        }, 1000
+                    )
+
+                }
+
+            },
+            /* addToBodies: function() {
+                 if (man.dead == true && man.per_dead == false) {
+
+                     menu.bodies.push(man);
+
+                     menu.addBodies(man);
+                 }
+             },*/
+            relive: function() {
+                console.log("relife")
+                menu.souls--;
+                man.dead = false;
+                //   bird.top_val = 50;
+                bird.manual = true;
+                //bird.manual_bird_move();
+                man.character.classList.remove("black");
+                timer.parentNode.removeChild(timer);
+                //bi.character.style.top = bird.top_val + "vh"
+
+            },
+        }
+        var shark = {
+                character: char[4],
+                top: char[4].style.top,
+                left: char[4].style.left,
+                left_val1: 40,
+                bottom_val: 2,
+                defaultLeft: 20,
+                timer: 90,
+                dead: false,
+                per_dead: false,
+                universe: 2,
+                manual: false,
+
+                //defaultJumb: 5,
+                max_def: 84,
+                min_def: 5,
+                def_move_shark: function() {
+                    if (shark.dead != true && shark.manual == false) {
+
+                        //  if (true) {
+                        stop = setInterval(() => {
+                            shark.left_val1 = shark.left_val1 + shark.defaultLeft;
+                            shark.character.style.left = shark.left_val1 + "vw";
+                            if (shark.left_val1 > shark.max_def) {
+                                shark.defaultLeft = -1.5;
+                                shark.character.classList.toggle("flip");
+
+                            } else if (shark.left_val1 < shark.min_def) {
+                                shark.defaultLeft = 1.5;
+                                shark.character.classList.toggle("flip");
+
+                            }
+                        }, 100);
+
+
+
+                    } else {
+                        clearInterval(stop);
+                    }
+                    //  }
+                },
+                manual_shark_move: function() {
+                    if (!shark.dead) {
+                        /*   var leftIncMan = 2;
+                           var uDInc = 5;
+                           var end = false;
+                           var theMove;
+                           if (!man.dead) {*/
+                        var leftIncMan = 0.15;
+                        // window.addEventListener("mousedown", function(event) {
+
+                        if (!(pixelToView(event.clientX, "w") >= shark.left_val1 && pixelToView(event.clientX, "w") <= (shark.left_val1 + man.width))) {
+
+                            //you should transfer the client into viewport
+                            //create  function that check if that left equals to any left so it stops 
+                            if (pixelToView(event.clientX, "w") >= shark.left_val1) {
+                                if (leftIncMan < 0) {
+                                    leftIncMan = -leftIncMan;
+                                }
+                                shark.character.classList.remove("flip");
+
+                            } else {
+                                if (leftIncMan > 0) {
+                                    leftIncMan = -leftIncMan;
+
+                                }
+                                shark.character.classList.add("flip");
+                            }
+                            theMove = setInterval(
+                                () => {
+
+                                    //   sahr.open();
+                                    shark.left_val1 = shark.left_val1 + leftIncMan;
+
+                                    shark.character.style.left = shark.left_val1 + "vw";
+                                },
+                                5);
+                            //shark.character.classList.add("flip");
+                            // }
+                            /* theMove = setInterval(
+                                 () => {
+
+
+                                     shark.left_val1 = shark.left_val1 + leftIncMan;
+                                     shark.bottom_val = shark.bottom_val + uDInc;
+                                     shark.character.style.left = shark.left_val1 + "px";
+                                     shark.character.style.bottom = shark.bottom_val + "px";
+
+                                 },
+                                 5);*/
+                            // }
+
+
+                            // })
+
+                        }
+                    }
+
+                },
+                reallocate: function() {
+                    if (this.universe != universe) {
+                        this.character.style.visibility = "hidden";
+
+                    } else {
+                        this.character.style.visibility = "visible";
+                    }
+                },
+                wasted: function() {
+
+                    clearInterval(stop);
+                    menu.addBodies(shark);
+
+                    shark.character.classList.add("black");
+                    timer = document.createElement("div");
+                    shark.character.appendChild(timer);
+                    timer.classList.add("timer");
+                    // console.log(man.character.childNodes[1]);
+
+                    completely_dead = setInterval(
+                        () => {
+                            shark.timer--;
+                            timer.innerHTML = shark.timer;
+                            if (shark.timer == 0) {
+                                //  clearInterval(completely_dead);
+                                shark.innerHTML = "dead";
+                                // shark.per_dead = true;
+                                shark.character.remove();
+                                menu.removeBodies(shark);
+
+                            }
+                        }, 1000
+                    )
+
+
+                },
+                /* addToBodies: function() {
+                    //this function was found useless  
+                     if (shark.dead == true && shark.per_dead == false) {
+
+                         menu.bodies.push(shark);
+
+                         menu.addBodies(shark);
+                     }
+                 },*/
+                relive: function() {
+                    console.log("relife")
+                        //  menu.souls--;
+                    shark.dead = false;
+                    //   bird.top_val = 50;
+                    shark.manual = true;
+                    shark.manual_shark_move();
+                    shark.character.classList.remove("black");
+                    timer.parentNode.removeChild(timer);
+                    //bi.character.style.top = bird.top_val + "vh"
+
+
+                },
+
+
+
+
+
+            }
+            //bird.reallocate();
+            //box.reallocate();
+            //man.reallocate();
+        bird.def_move_bird();
+        //  bird.relive();
+        //  bird.wasted();
+        // box.contentSelection();
+        // man.wasted();
+        hide_seek(universe);
+        shark.def_move_shark();
+        // bird.manual_bird_move();
+        //bird.switchUniverse();
+        man.character.addEventListener("click", function(event) {
+            //console.log(menu.bodies[0]);
+            man.jump()
+        })
+        window.addEventListener("click", function(event) {
+
+            if (!bird.dead && bird.manual == true) {
+                if (pixelToView(event.clientX, "w") > bird.left_val1) {
+                    if (leftinc < 0) {
+                        leftinc = -leftinc;
+                    }
+                    bird.character.classList.remove("flip");
+
+                } else {
+                    if (leftinc > 0) {
+                        leftinc = -leftinc;
+
+                    }
+                    bird.character.classList.add("flip");
+
+                }
+                if (bird.top_val > 10) {
+                    bird.top_val = bird.top_val - 20;
+                }
+
+
+                bird.left_val1 = bird.left_val1 + leftinc; //why bird works but this dont
+
+                bird.character.style.top = bird.top_val + "vh";
+                bird.character.style.left = bird.left_val1 + "vw";
+                shark_die_scenario();
+                bird.switchUniverse();
+                //   bird.manual_bird_move();
+            }
+        })
+        window.addEventListener("mousedown", function(event) {
+            man.move()
+        })
+        window.addEventListener("mouseup", function(event) {
+            clearInterval(theMove);
+        })
+        if (universe == 2) {
+            window.addEventListener("mousedown", function(event) {
+                shark.manual_shark_move()
+            })
+            window.addEventListener("mouseup", function(event) {
+                clearInterval(theMove);
+            })
+        }
+        box.character.addEventListener("click", function(event) {
+            //  bird.wasted();
+            man.open();
+            box.open();
+        })
+
+        //our problem is that the bird disappears
+    </script>
+</body>
+
+</html>
